@@ -1,0 +1,13 @@
+<h1>Branch Manager Branches</h1>
+
+<ul>
+  {% for school_branch in school_branches %}
+    <li>
+      <h3>{{ school_branch.name }}</h3>
+      <p>School: {{ school_branch.school.name }}</p>
+      <!-- Add any other relevant information about the school branch -->
+    </li>
+  {% empty %}
+    <li>No school branches found.</li>
+  {% endfor %}
+</ul>

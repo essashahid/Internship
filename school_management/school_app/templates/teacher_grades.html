@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Grades</title>
+</head>
+<body>
+    <h1>Teacher: {{ teacher.name }}</h1>
+    <h2>Grades:</h2>
+    <ul>
+        {% for grade in grades %}
+            <li>{{ grade }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
