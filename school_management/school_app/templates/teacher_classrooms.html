@@ -1,0 +1,10 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Classrooms where {{ teacher.name }} is Teaching</h2>
+  <ul>
+  {% for classroom in classrooms %}
+    <li>{{ classroom.name }}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Branch Manager School View</title>
+</head>
+<body>
+    <h1>Branch Manager School View</h1>
+    <ul>
+        {% for school in branch_manager_schools %}
+        <li>{{ school.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

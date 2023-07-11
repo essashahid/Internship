@@ -1,0 +1,10 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Subjects that {{ teacher.name }} Can Teach</h2>
+  <ul>
+  {% for subject in subjects %}
+    <li>{{ subject.name }}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}
