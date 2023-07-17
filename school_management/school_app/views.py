@@ -1,16 +1,19 @@
 from django.shortcuts import render
-from .models import User, School, SchoolBranch, Classroom, Student, Teacher, Subject, ClassroomSubjectTeacher, UserSchoolBranch
+from .models import User, UserProfile, School, SchoolBranch, Classroom, Student, Teacher, Subject, ClassroomSubjectTeacher
 
 # User is admin of which school?
 def admin_school_view(request):
-    admin_username = 'admin'
+    admin_username = 'essaarshad'
     try:
         admin_user = User.objects.get(username=admin_username)
-        admin_schools = School.objects.filter(
-            branches__user_school_branches__user=admin_user,
-            branches__user_school_branches__role='ADMIN'
-        )
-        return render(request, 'admin_school.html', {'admin_schools': admin_schools})
+        try:
+            admin_profile = UserProfile.objects.get(user=admin_user, role=UserProfile.SCHOOL_ADMIN)
+            admin_schools = School.objects.filter(
+                branches__admins=admin_profile
+            )
+            return render(request, 'admin_school.html', {'admin_schools': admin_schools})
+        except UserProfile.DoesNotExist:
+            return render(request, 'failure.html', {'message': f"No UserProfile found for admin user '{admin_username}'."})
     except User.DoesNotExist:
         return render(request, 'failure.html', {'message': f"Admin user '{admin_username}' does not exist."})
 
@@ -19,11 +22,14 @@ def branch_manager_school_view(request):
     branch_manager_username = 'branch_manager'
     try:
         branch_manager_user = User.objects.get(username=branch_manager_username)
-        branch_manager_schools = School.objects.filter(
-            branches__user_school_branches__user=branch_manager_user,
-            branches__user_school_branches__role='BRANCH_MANAGER'
-        )
-        return render(request, 'branch_manager_school.html', {'branch_manager_schools': branch_manager_schools})
+        try:
+            branch_manager_profile = UserProfile.objects.get(user=branch_manager_user, role=UserProfile.SCHOOL_BRANCH_MANAGER)
+            branch_manager_schools = School.objects.filter(
+                branches__branch_managers=branch_manager_profile
+            )
+            return render(request, 'branch_manager_school.html', {'branch_manager_schools': branch_manager_schools})
+        except UserProfile.DoesNotExist:
+            return render(request, 'failure.html', {'message': f"No UserProfile found for branch manager user '{branch_manager_username}'."})
     except User.DoesNotExist:
         return render(request, 'failure.html', {'message': f"Branch manager user '{branch_manager_username}' does not exist."})
 
@@ -32,8 +38,12 @@ def school_admin_branches_view(request):
     school_admin_username = 'admin'
     try:
         school_admin = User.objects.get(username=school_admin_username)
-        school_branches = SchoolBranch.objects.filter(user_school_branches__user=school_admin, user_school_branches__role='ADMIN')
-        return render(request, 'school_admin_branches.html', {'school_branches': school_branches})
+        try:
+            school_admin_profile = UserProfile.objects.get(user=school_admin, role=UserProfile.SCHOOL_ADMIN)
+            school_branches = SchoolBranch.objects.filter(admins=school_admin_profile)
+            return render(request, 'school_admin_branches.html', {'school_branches': school_branches})
+        except UserProfile.DoesNotExist:
+            return render(request, 'failure.html', {'message': f"No UserProfile found for school admin user '{school_admin_username}'."})
     except User.DoesNotExist:
         return render(request, 'failure.html', {'message': f"School admin user '{school_admin_username}' does not exist."})
 
@@ -42,10 +52,17 @@ def branch_manager_branches_view(request):
     branch_manager_username = 'branch_manager'
     try:
         branch_manager = User.objects.get(username=branch_manager_username)
-        school_branches = SchoolBranch.objects.filter(user_school_branches__user=branch_manager, user_school_branches__role='BRANCH_MANAGER')
-        return render(request, 'branch_manager_branches.html', {'school_branches': school_branches})
+        try:
+            branch_manager_profile = UserProfile.objects.get(user=branch_manager, role=UserProfile.SCHOOL_BRANCH_MANAGER)
+            school_branches = SchoolBranch.objects.filter(branch_managers=branch_manager_profile)
+            return render(request, 'branch_manager_branches.html', {'school_branches': school_branches})
+        except UserProfile.DoesNotExist:
+            return render(request, 'failure.html', {'message': f"No UserProfile found for branch manager user '{branch_manager_username}'."})
     except User.DoesNotExist:
         return render(request, 'failure.html', {'message': f"Branch manager user '{branch_manager_username}' does not exist."})
+
+# Rest of the code remains the same
+...
 
 # Get all classrooms of a school_branch
 def school_branch_classrooms_view(request, branch_id):
