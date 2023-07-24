@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import ClassroomCreate
+from . import api
+from .api import ClassroomCreate,StudentList
 
 urlpatterns = [
     path('admin-school/', views.admin_school_view, name='admin-school'),
@@ -21,8 +22,9 @@ urlpatterns = [
     path('school-branch-teachers/<int:branch_id>/', views.school_branch_teachers_view, name='school-branch-teachers'),
     path('school-branch-students/<int:branch_id>/', views.school_branch_students_view, name='school-branch-students'),
     # APi urls
-    path('api/school/<int:school_id>/classrooms/', views.SchoolClassroomsList.as_view()),
-    path('api/branch/<int:branch_id>/classrooms/', views.SchoolBranchClassroomsList.as_view()),
+    path('api/school/<int:school_id>/classrooms/', api.SchoolClassroomsList.as_view()),
+    path('api/branch/<int:branch_id>/classrooms/', api.SchoolBranchClassroomsList.as_view()),
     path('api/classroom/new/', ClassroomCreate.as_view(), name='classroom-create'),
-    # Add more URL patterns for other views
+    path('students/', StudentList.as_view(), name='student-list'),
+
 ]

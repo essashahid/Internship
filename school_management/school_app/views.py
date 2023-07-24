@@ -159,31 +159,4 @@ def school_branch_students_view(request, branch_id):
     return render(request, 'school_branch_students.html', {'students': students})
 
 
-# Seperate Code for serializers.py:
 
-from rest_framework import generics
-from .models import Classroom, School, SchoolBranch
-from .serializers import ClassroomSerializer, SchoolSerializer, SchoolBranchSerializer
-
-class ClassroomCreate(generics.CreateAPIView):
-    queryset = Classroom.objects.all()
-    serializer_class = ClassroomSerializer
-
-
-
-class SchoolClassroomsList(generics.ListAPIView):
-    serializer_class = ClassroomSerializer
-
-    def get_queryset(self):
-        school_id = self.kwargs['school_id']
-        return Classroom.objects.filter(branch__school_id=school_id)
-
-class SchoolBranchClassroomsList(generics.ListAPIView):
-    serializer_class = ClassroomSerializer
-
-    def get_queryset(self):
-        branch_id = self.kwargs['branch_id']
-        return Classroom.objects.filter(branch_id=branch_id)
-
-
-   

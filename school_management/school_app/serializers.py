@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Classroom, School, SchoolBranch
+from .models import Classroom, School, SchoolBranch,Student
+from datetime import date
 
 class ClassroomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,3 +17,18 @@ class SchoolBranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolBranch
         fields = ['id', 'name', 'school']  
+
+class StudentSerializer(serializers.ModelSerializer):
+    school_name = serializers.ReadOnlyField(source='classroom.branch.school.name')
+    school_branch = serializers.ReadOnlyField(source='classroom.branch.name')
+    classroom = serializers.ReadOnlyField(source='classroom.grade')
+    section = serializers.ReadOnlyField(source='classroom.section')
+    age = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Student
+        fields = ['name', 'date_of_birth', 'age', 'school_name', 'school_branch', 'classroom', 'section']
+
+    def get_age(self, obj):
+        today = date.today()
+        return today.year - obj.date_of_birth.year - ((today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
