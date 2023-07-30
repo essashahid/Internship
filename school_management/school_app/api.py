@@ -11,8 +11,15 @@ from rest_framework import generics, pagination, authentication,permissions, sta
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-
 from .models import UserProfile
+from .serializers import SchoolSerializer, SchoolBranchSerializer, TeacherSerializer
+from .models import Teacher
+
+
+from rest_framework import generics
+from .models import Classroom
+from .serializers import ClassroomSerializer
+from .permissions import IsRelatedToClassroom
 
 class IsSchoolAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -57,8 +64,6 @@ class UserLoginAPIView(APIView):
 
 
 
-from .serializers import SchoolSerializer, SchoolBranchSerializer, TeacherSerializer
-from .models import Teacher
 
 # For School
 class SchoolAPI(generics.ListCreateAPIView):
@@ -99,7 +104,6 @@ class TeacherDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSchoolAdmin]
 
-# For Student
 class StudentAPI(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -111,3 +115,15 @@ class StudentDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StudentSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSchoolAdmin]
+
+
+class ClassroomDetailView(generics.RetrieveAPIView):
+    queryset = Classroom.objects.all()
+    serializer_class = ClassroomSerializer
+    permission_classes = [IsRelatedToClassroom]
+
+    def get_object(self):
+        obj = super().get_object()
+        self.check_object_permissions(self.request, obj)
+        return obj
+

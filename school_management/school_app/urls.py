@@ -3,6 +3,8 @@ from . import views
 from . import api
 from .api import ClassroomCreate,StudentList, UserLoginAPIView
 from .api import SchoolAPI, SchoolDetailAPI, SchoolBranchAPI, SchoolBranchDetailAPI, TeacherAPI, TeacherDetailAPI, StudentAPI, StudentDetailAPI
+from .api import ClassroomDetailView
+
 
 
 urlpatterns = [
@@ -37,6 +39,9 @@ urlpatterns = [
     path('api/teacher/<int:pk>/', TeacherDetailAPI.as_view(), name='teacher_detail_api'),
     path('api/student/', StudentAPI.as_view(), name='student_api'),
     path('api/student/<int:pk>/', StudentDetailAPI.as_view(), name='student_detail_api'),
+    path('classrooms/<int:pk>/', ClassroomDetailView.as_view(), name='classroom-detail'),
+
+    
     
 
 

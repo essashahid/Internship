@@ -159,4 +159,3 @@ def school_branch_students_view(request, branch_id):
     return render(request, 'school_branch_students.html', {'students': students})
 
 
-

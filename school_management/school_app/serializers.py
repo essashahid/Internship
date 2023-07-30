@@ -7,7 +7,6 @@ class ClassroomSerializer(serializers.ModelSerializer):
         model = Classroom
         fields = ['id', 'grade', 'section', 'branch']
 
-
 class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
@@ -21,7 +20,7 @@ class SchoolBranchSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     school_name = serializers.ReadOnlyField(source='classroom.branch.school.name')
     school_branch = serializers.ReadOnlyField(source='classroom.branch.name')
-    classroom = serializers.ReadOnlyField(source='classroom.grade')
+    classroom = serializers.PrimaryKeyRelatedField(queryset=Classroom.objects.all()) # Change this line
     section = serializers.ReadOnlyField(source='classroom.section')
     age = serializers.SerializerMethodField()
 

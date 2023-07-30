@@ -109,6 +109,7 @@ REST_FRAMEWORK = {
        'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',  # primary authentication
         'rest_framework.authentication.SessionAuthentication',  # secondary
+        
     ],
 }
 
