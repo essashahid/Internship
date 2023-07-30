@@ -47,8 +47,8 @@ def print_employees_by_email():
 def print_employees_by_age():
     print()
     print('(2) Sorted According to Age in ascending order:\n ')
-    dict_sorted = sorted(employees.items(), key = lambda x:x[1]['age'])
-    sorted_dict = dict(dict_sorted)
+    list_sorted: list = sorted(employees.items(), key = lambda x:x[1]['age'])
+    sorted_dict = dict(list_sorted)
     print(sorted_dict)
     print()
 
@@ -57,8 +57,8 @@ def print_employees_by_age():
 def print_employees_by_age_descending():
     print()
     print('(3) Sorted According to Age in descending order :\n ')
-    dict_sorted = sorted(employees.items(), key = lambda x:x[1]['age'],reverse=True)
-    sorted_dict = dict(dict_sorted)
+    list_sorted: list = sorted(employees.items(), key = lambda x:x[1]['age'],reverse=True)
+    sorted_dict = dict(list_sorted)
     print(sorted_dict)
     print()
     
@@ -66,36 +66,37 @@ def print_employees_by_age_descending():
 def print_employees_by_full_name():
     print()
     print('(4) Sorted According to Full Name:\n ')
-    dict_sorted = sorted(employees.items(), key = lambda x:x[1]['first_name'] + x[1]['last_name'])
-    sorted_dict = dict(dict_sorted)
+    list_sorted: list = sorted(employees.items(), key = lambda x:x[1]['first_name'] + x[1]['last_name'])
+    sorted_dict = dict(list_sorted)
     print(sorted_dict)
 
 
 def print_employees_by_full_name_length():
     print()
     print("(5) Sorted According to Full Name Length:\n ")
-    dict_sorted = sorted(employees.items(), key = lambda x:len(x[1]['first_name'] + x[1]['last_name']))
-    sorted_dict = dict(dict_sorted)
+    list_sorted: list  = sorted(employees.items(), key = lambda x:len(x[1]['first_name'] + x[1]['last_name']))
+    sorted_dict = dict(list_sorted)
     print(sorted_dict)
 
 
 def print_employees_by_avg_last_month_scores():
     print()
-    print("(6) Sorted According to last 3 month scores:\n ")
-    dict_sorted = sorted(employees.items(), key = lambda x:mean(x[1]['last_three_scores']))
-    sorted_dict = dict(dict_sorted)
-    first_n = more_itertools.take(3, sorted_dict.items())
+    print("(6) Sorted According to last 3 month scores:\n")
+    list_sorted = sorted(employees.items(), key=lambda x: mean(x[1]['last_three_scores']))
+    sorted_dict = dict(list_sorted)
+    first_n = list(sorted_dict.items())[0:3]
     print(first_n)
+
 
 def print_employee_designations():
     print()
-    print("(7) Employee Designations:\n ")
+    print("(7) Employee Designations:\n")
     target = "designation"
     res = [val[target] for key, val in employees.items() if target in val]
     res = set(res)
-    res = list(res)
-    for i in range(0,3,+1):
-        print(res[i])
+    print('\n'.join(res))
+
+
 
 def print_comma_seperated_string():
     print()
@@ -103,9 +104,6 @@ def print_comma_seperated_string():
     keys_str = ','.join(employees.keys())
     print(keys_str)
     
-
-
-
 
 def main():
 
