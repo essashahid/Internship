@@ -130,7 +130,6 @@ class StudentAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSchoolAdmin]
 
-
     def get_queryset(self):
         school_id = self.kwargs['pk']
         return Student.objects.filter(pk=school_id)
