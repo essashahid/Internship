@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from . import api
 from .api import ClassroomCreate,StudentList, UserLoginAPIView
-from .api import SchoolAPI, SchoolDetailAPI, SchoolBranchAPI, SchoolBranchDetailAPI, TeacherAPI, TeacherDetailAPI, StudentAPI, StudentDetailAPI
+from .api import SchoolAPI, SchoolAPIView, SchoolBranchAPI, SchoolBranchAPIView, TeacherAPI, TeacherAPIView, StudentAPI, StudentAPIView
 from .api import ClassroomDetailView
 
 
@@ -32,13 +32,13 @@ urlpatterns = [
     path('api/classroom/new/', ClassroomCreate.as_view(), name='classroom-create'),
     path('students/', StudentList.as_view(), name='student-list'),
     path('api/school/', SchoolAPI.as_view(), name='school_api'),
-    path('api/school/<int:pk>/', SchoolDetailAPI.as_view(), name='school_detail_api'),
+    path('api/school/<int:pk>/', SchoolAPIView.as_view(), name='school_detail_api'),
     path('api/school-branch/', SchoolBranchAPI.as_view(), name='school_branch_api'),
-    path('api/school-branch/<int:pk>/', SchoolBranchDetailAPI.as_view(), name='school_branch_detail_api'),
+    path('api/school-branch/<int:pk>/', SchoolBranchAPIView.as_view(), name='school_branch_detail_api'),
     path('api/teacher/', TeacherAPI.as_view(), name='teacher_api'),
-    path('api/teacher/<int:pk>/', TeacherDetailAPI.as_view(), name='teacher_detail_api'),
+    path('api/teacher/<int:pk>/', TeacherAPIView.as_view(), name='teacher_detail_api'),
     path('api/student/', StudentAPI.as_view(), name='student_api'),
-    path('api/student/<int:pk>/', StudentDetailAPI.as_view(), name='student_detail_api'),
+    path('api/student/<int:pk>/', StudentAPIView.as_view(), name='student_detail_api'),
     path('classrooms/<int:pk>/', ClassroomDetailView.as_view(), name='classroom-detail'),
 
     
