@@ -1,19 +1,25 @@
 from rest_framework import permissions
-from school_app.models.user_profile import UserProfile
+from school_app.models import SchoolBranch, UserProfile,Classroom
+from rest_framework.exceptions import PermissionDenied
+from rest_framework import permissions
+from .models import SchoolBranch
 
+class HasAccessOfSchoolBranch(permissions.BasePermission):
+    message = "You don't have access to this school branch."
 
-class IsRelatedToClassroom(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if not request.user.is_authenticated:
+    def has_permission(self, request, view):
+        classroom_id = view.kwargs['pk'] if 'pk' in view.kwargs else None
+
+        if classroom_id is None:
             return False
 
-        user_profile = request.user.profile
+        try:
+            classroom = Classroom.objects.get(id=classroom_id)
 
-        is_teacher = obj.classroom_subject_teachers.filter(teacher__name=user_profile.user.username).exists()
-        is_student = obj.students.filter(name=user_profile.user.username).exists()
+            school_branch = classroom.branch
 
-        is_school_admin = (user_profile.role == UserProfile.SCHOOL_ADMIN or user_profile.admin_school_branches.filter(school=obj.branch.school).exists())
-        is_branch_manager = (user_profile.role == UserProfile.SCHOOL_BRANCH_MANAGER or user_profile.manager_school_branches.filter(id=obj.branch.id).exists())
+            return request.user.id in school_branch.branch_managers.values_list('id', flat=True)
 
+        except (Classroom.DoesNotExist, SchoolBranch.DoesNotExist):
+            return False
 
-        return is_teacher or is_student or is_school_admin or is_branch_manager

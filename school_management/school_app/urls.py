@@ -41,6 +41,8 @@ urlpatterns = [
     path('api/student/<int:pk>/', StudentAPIView.as_view(), name='student_detail_api'),
     path('classrooms/<int:pk>/', ClassroomDetailView.as_view(), name='classroom-detail'),
 
+
+
     
     
 

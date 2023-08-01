@@ -7,7 +7,7 @@ from rest_framework.authentication import TokenAuthentication
 from django.contrib.auth import authenticate
 from .models import Classroom, School, SchoolBranch, Student, UserProfile, Teacher
 from .serializers import ClassroomSerializer, StudentSerializer, SchoolSerializer, SchoolBranchSerializer, TeacherSerializer
-from .permissions import IsRelatedToClassroom
+from .permissions import HasAccessOfSchoolBranch
 
 
 
@@ -139,7 +139,7 @@ class StudentAPIView(generics.RetrieveUpdateDestroyAPIView):
 class ClassroomDetailView(generics.RetrieveAPIView):
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
-    permission_classes = [IsRelatedToClassroom]
+    permission_classes = [HasAccessOfSchoolBranch]
 
     def get_object(self):
         obj = super().get_object()

@@ -1,12 +1,13 @@
 from rest_framework import serializers
 from .models import Classroom, School, SchoolBranch, Student, Teacher
 from datetime import date
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 class ClassroomSerializer(serializers.ModelSerializer):
     grade = serializers.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
-    section = serializers.CharField(min_length=1, max_length=255, required=True) 
+    section = serializers.CharField(min_length=1, max_length=255, required=True,
+                                     validators=[RegexValidator(r'^[A-Z]$', 'Only a single uppercase letter is allowed.')])
 
     class Meta:
         model = Classroom
@@ -14,7 +15,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=255, required=True)
+    name = serializers.CharField(
+        max_length=255,
+        required=True,
+        validators=[RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')]
+    )
 
     class Meta:
         model = School
@@ -22,8 +27,12 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
 class SchoolBranchSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=255, required=True)
-    school = serializers.PrimaryKeyRelatedField(queryset=School.objects.all()) 
+    name = serializers.CharField(
+        max_length=255,
+        required=True,
+        validators=[RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')]
+    )
+    school = serializers.PrimaryKeyRelatedField(queryset=School.objects.all())
 
     class Meta:
         model = SchoolBranch
@@ -33,10 +42,11 @@ class SchoolBranchSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     school_name = serializers.ReadOnlyField(source='classroom.branch.school.name')
     school_branch = serializers.ReadOnlyField(source='classroom.branch.name')
-    classroom = serializers.PrimaryKeyRelatedField(queryset=Classroom.objects.all()) # Change this line
+    classroom = serializers.PrimaryKeyRelatedField(queryset=Classroom.objects.all())
     section = serializers.ReadOnlyField(source='classroom.section')
     age = serializers.SerializerMethodField()
-    name = serializers.CharField(max_length=255, required=True)
+    name = serializers.CharField(max_length=255, required=True,
+                                 validators=[RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')])
     date_of_birth = serializers.DateField()
 
     class Meta:
@@ -46,7 +56,7 @@ class StudentSerializer(serializers.ModelSerializer):
     def get_age(self, obj):
         today = date.today()
         age = today.year - obj.date_of_birth.year - ((today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
-        if age < 3 or age > 100: # Age validation
+        if age < 3 or age > 100:
             raise serializers.ValidationError(_("Age must be between 3 and 100"))
         return age
 
@@ -55,8 +65,13 @@ class StudentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_("Date of birth cannot be in the future"))
         return value
 
+
 class TeacherSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=255, required=True)
+    name = serializers.CharField(
+        max_length=255,
+        required=True,
+        validators=[RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')]
+    )
 
     class Meta:
         model = Teacher
