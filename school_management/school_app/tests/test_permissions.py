@@ -37,7 +37,7 @@ class SchoolBranchAccessTest(APITestCase):
         url = reverse('classroom-detail', kwargs={'pk': classroom.id})
         self.client.force_authenticate(user=self.branch_manager1)
         response = self.client.get(url)
-        print("content of response", response.content)
+        # print("content of response", response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_no_access_without_permission(self):

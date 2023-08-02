@@ -6,7 +6,6 @@ from .api import SchoolAPI, SchoolAPIView, SchoolBranchAPI, SchoolBranchAPIView,
 from .api import ClassroomDetailView
 
 
-
 urlpatterns = [
     path('admin-school/', views.admin_school_view, name='admin-school'),
     path('branch-manager-school/', views.branch_manager_school_view, name='branch-manager-school'),
@@ -41,10 +40,7 @@ urlpatterns = [
     path('api/student/<int:pk>/', StudentAPIView.as_view(), name='student_detail_api'),
     path('classrooms/<int:pk>/', ClassroomDetailView.as_view(), name='classroom-detail'),
 
-
-
-    
-    
-
-
 ]
+
+
+

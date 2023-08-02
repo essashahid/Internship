@@ -1,4 +1,4 @@
-from rest_framework import generics, pagination, authentication, permissions, status
+from rest_framework import generics, authentication, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 from .models import Classroom, School, SchoolBranch, Student, UserProfile, Teacher
 from .serializers import ClassroomSerializer, StudentSerializer, SchoolSerializer, SchoolBranchSerializer, TeacherSerializer
 from .permissions import HasAccessOfSchoolBranch
-
+from django.shortcuts import get_object_or_404
 
 
 class IsSchoolAdmin(permissions.BasePermission):
@@ -44,14 +44,16 @@ class UserLoginAPIView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
+
+        if not username or not password:
+            return Response({"error": "Both username and password are required"}, status=status.HTTP_400_BAD_REQUEST)
+
         user = authenticate(username=username, password=password)
         if user:
             token, created = Token.objects.get_or_create(user=user)
             return Response({"token": token.key}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Invalid username or password"}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 # For School
 class SchoolAPI(generics.ListCreateAPIView):
@@ -136,11 +138,12 @@ class StudentAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ClassroomDetailView(generics.RetrieveAPIView):
-    queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
     permission_classes = [HasAccessOfSchoolBranch]
 
     def get_object(self):
-        obj = super().get_object()
+        classroom_id = self.kwargs['pk']
+        obj = get_object_or_404(Classroom, id=classroom_id)
         self.check_object_permissions(self.request, obj)
         return obj
+

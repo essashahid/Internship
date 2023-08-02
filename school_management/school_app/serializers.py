@@ -13,7 +13,6 @@ class ClassroomSerializer(serializers.ModelSerializer):
         model = Classroom
         fields = ['id', 'grade', 'section', 'branch']
 
-
 class SchoolSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=255,
@@ -24,7 +23,6 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ['id', 'name']
-
 
 class SchoolBranchSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
@@ -55,16 +53,19 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         today = date.today()
-        age = today.year - obj.date_of_birth.year - ((today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
-        if age < 3 or age > 100:
-            raise serializers.ValidationError(_("Age must be between 3 and 100"))
-        return age
+        return today.year - obj.date_of_birth.year - ((today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
 
     def validate_date_of_birth(self, value):
-        if value > date.today():
-            raise serializers.ValidationError(_("Date of birth cannot be in the future"))
-        return value
+        today = date.today()
+        age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
+        
+        if age < 3 or age > 100:
+            raise serializers.ValidationError(_("Age must be between 3 and 100"))
 
+        if value > today:
+            raise serializers.ValidationError(_("Date of birth cannot be in the future"))
+
+        return value
 
 class TeacherSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
@@ -76,3 +77,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = ['id', 'name']
+
+
+
+ 
