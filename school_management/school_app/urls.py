@@ -1,12 +1,21 @@
 from django.urls import path
 from . import views
 from . import api
-from .api import ClassroomCreate,StudentList, UserLoginAPIView
+from .api import ClassroomCreate,UserLoginAPIView
 from .api import SchoolAPI, SchoolAPIView, SchoolBranchAPI, SchoolBranchAPIView, TeacherAPI, TeacherAPIView, StudentAPI, StudentAPIView
 from .api import ClassroomDetailView
 
+from django.urls import path
+from . import views
+from .api import (
+    ClassroomCreate, UserLoginAPIView,
+    SchoolAPI, SchoolAPIView, SchoolBranchAPI, SchoolBranchAPIView,
+    TeacherAPI, TeacherAPIView, StudentAPI, StudentAPIView,
+    ClassroomDetailView,SchoolBranchClassroomsList,SchoolClassroomsList
+)
 
-urlpatterns = [
+
+regular_view_patterns = [
     path('admin-school/', views.admin_school_view, name='admin-school'),
     path('branch-manager-school/', views.branch_manager_school_view, name='branch-manager-school'),
     path('school-admin-branches/', views.school_admin_branches_view, name='school-admin-branches'),
@@ -24,12 +33,14 @@ urlpatterns = [
     path('subject-teachers/<int:subject_id>/', views.subject_teachers_view, name='subject-teachers'),
     path('school-branch-teachers/<int:branch_id>/', views.school_branch_teachers_view, name='school-branch-teachers'),
     path('school-branch-students/<int:branch_id>/', views.school_branch_students_view, name='school-branch-students'),
-    # APi urls
+]
+
+
+api_view_patterns = [
     path('api/login/', UserLoginAPIView.as_view(), name='login'),
-    path('api/school/<int:school_id>/classrooms/', api.SchoolClassroomsList.as_view()),
-    path('api/branch/<int:branch_id>/classrooms/', api.SchoolBranchClassroomsList.as_view()),
+    path('api/school/<int:school_id>/classrooms/', SchoolClassroomsList.as_view()),
+    path('api/branch/<int:branch_id>/classrooms/', SchoolBranchClassroomsList.as_view()),
     path('api/classroom/new/', ClassroomCreate.as_view(), name='classroom-create'),
-    path('students/', StudentList.as_view(), name='student-list'),
     path('api/school/', SchoolAPI.as_view(), name='school_api'),
     path('api/school/<int:pk>/', SchoolAPIView.as_view(), name='school_detail_api'),
     path('api/school-branch/', SchoolBranchAPI.as_view(), name='school_branch_api'),
@@ -39,8 +50,9 @@ urlpatterns = [
     path('api/student/', StudentAPI.as_view(), name='student_api'),
     path('api/student/<int:pk>/', StudentAPIView.as_view(), name='student_detail_api'),
     path('classrooms/<int:pk>/', ClassroomDetailView.as_view(), name='classroom-detail'),
-
 ]
+
+urlpatterns = regular_view_patterns + api_view_patterns
 
 
 

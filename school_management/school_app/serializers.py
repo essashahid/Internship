@@ -13,6 +13,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
         model = Classroom
         fields = ['id', 'grade', 'section', 'branch']
 
+
 class SchoolSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=255,
@@ -23,6 +24,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ['id', 'name']
+
 
 class SchoolBranchSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
