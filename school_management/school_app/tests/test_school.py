@@ -3,7 +3,6 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth.models import User
-
 from school_app.models import UserProfile, School, SchoolBranch,Teacher, Classroom, SchoolBranch,Student
 from rest_framework.authtoken.models import Token
 
@@ -36,7 +35,6 @@ class SchoolTests(TestCase):
         else:
             print(f"School update test: failure, received status code {response.status_code}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
 
     def test_delete_school(self):
         response = self.client.post(reverse('school_api'), self.school_data)

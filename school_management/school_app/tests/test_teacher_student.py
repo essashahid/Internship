@@ -24,9 +24,9 @@ class Teacher_StudentTests(TestCase):
 
         self.student_data = {
             "classroom": self.classroom.id,
-            "name": "John Doe",
+            "name": "Ali Nawaz",
             "date_of_birth": "2000-01-01",
-            "address": "123 Main St",
+            "address": "123 People's Colony",
         }
 
 

@@ -27,7 +27,6 @@ class SchoolClassroomsList(generics.ListAPIView):
     def get_queryset(self):
         return Classroom.objects.filter(branch__school_id=self.kwargs['school_id'])
 
-
 class SchoolBranchClassroomsList(generics.ListAPIView):
     serializer_class = ClassroomSerializer
 
@@ -54,11 +53,9 @@ class SchoolAdminAPIView(SchoolAdminPermissionMixin, generics.ListCreateAPIView)
     def get_queryset(self):
         return self.model_class.objects.filter(pk=self.kwargs['pk'])
 
-
 class SchoolAdminDetailAPIView(SchoolAdminPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return self.model_class.objects.filter(pk=self.kwargs['pk'])
-
 
 class SchoolAPI(SchoolAdminAPIView):
     queryset = School.objects.all()

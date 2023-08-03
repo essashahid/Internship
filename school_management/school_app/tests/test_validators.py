@@ -11,7 +11,6 @@ class ValidatorsTest(TestCase):
         self.branch = SchoolBranch.objects.create(name='Branch Name', school=self.school) # Create branch object with the school instance
         self.classroom = Classroom.objects.create(grade=5, section='A', branch=self.branch) # Create classroom object
 
-
     def test_classroom_serializer(self):
         valid_data = {'grade': 5, 'section': 'A', 'branch': self.branch.id}
         serializer = ClassroomSerializer(data=valid_data)
@@ -44,13 +43,13 @@ class ValidatorsTest(TestCase):
 
     def test_student_serializer(self):
         
-        valid_data = {'name': 'John Doe', 'date_of_birth': '2010-01-01', 'classroom': 1}
+        valid_data = {'name': 'Ali Nawaz', 'date_of_birth': '2010-01-01', 'classroom': 1}
         serializer = StudentSerializer(data=valid_data)
         print("Testing valid student data with valid data:", serializer.is_valid())
 
         self.assertTrue(serializer.is_valid(), "Student valid data failed.")
 
-        invalid_data = {'name': 'John Doe', 'date_of_birth': '3000-01-01', 'classroom': 1}
+        invalid_data = {'name': 'Ali Nawaz', 'date_of_birth': '3000-01-01', 'classroom': 1}
         serializer = StudentSerializer(data=invalid_data)
         print("Testing invalid student data with invalid date of birth:", serializer.is_valid())
         self.assertFalse(serializer.is_valid(), "Student future date of birth failed.")

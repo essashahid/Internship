@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from school_app.models import UserProfile, School, SchoolBranch,Teacher, Classroom, SchoolBranch,Student
 from rest_framework.authtoken.models import Token
 
-
 class SchoolBranchTests(TestCase):
     def setUp(self):
         self.client = APIClient()

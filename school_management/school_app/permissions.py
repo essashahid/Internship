@@ -8,13 +8,13 @@ class HasAccessOfSchoolBranch(permissions.BasePermission):
     message = "You don't have access to this school branch."
 
     def has_permission(self, request, view):
-        classroom_id = view.kwargs['pk'] if 'pk' in view.kwargs else None
+        branch_id = view.kwargs['pk'] if 'pk' in view.kwargs else None
 
-        if classroom_id is None:
+        if branch_id is None:
             return False
 
         try:
-            classroom = Classroom.objects.get(id=classroom_id)
+            classroom = Classroom.objects.get(id=branch_id)
 
             school_branch = classroom.branch
 
@@ -22,4 +22,3 @@ class HasAccessOfSchoolBranch(permissions.BasePermission):
 
         except (Classroom.DoesNotExist, SchoolBranch.DoesNotExist):
             return False
-

@@ -13,7 +13,6 @@ class ClassroomSerializer(serializers.ModelSerializer):
         model = Classroom
         fields = ['id', 'grade', 'section', 'branch']
 
-
 class SchoolSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=255,
@@ -24,7 +23,6 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ['id', 'name']
-
 
 class SchoolBranchSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
@@ -37,7 +35,6 @@ class SchoolBranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolBranch
         fields = ['id', 'name', 'school']
-
 
 class StudentSerializer(serializers.ModelSerializer):
     school_name = serializers.ReadOnlyField(source='classroom.branch.school.name')
@@ -75,11 +72,9 @@ class TeacherSerializer(serializers.ModelSerializer):
         required=True,
         validators=[RegexValidator(r'^[a-zA-Z\s]*$', 'Only alphabetic characters are allowed.')]
     )
-
+    
     class Meta:
         model = Teacher
         fields = ['id', 'name']
-
-
 
  
